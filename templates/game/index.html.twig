@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Battle Arena</h1>
+
+    {# state App\ValueObject\State #}
+    {% set playerHpPercent = ((state.player.hp / 100) * 100)|round(0, 'floor') %}
+    {% if playerHpPercent < 0 %}{% set playerHpPercent = 0 %}{% endif %}
+    {% if playerHpPercent > 100 %}{% set playerHpPercent = 100 %}{% endif %}
+
+    {# Monster % #}
+    {% set monsterHpPercent = ((state.monster.hp / state.monster.maxHp) * 100)|round(0, 'floor') %}
+    {% if monsterHpPercent < 0 %}{% set monsterHpPercent = 0 %}{% endif %}
+    {% if monsterHpPercent > 100 %}{% set monsterHpPercent = 100 %}{% endif %}
+
+    <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap">
+
+        <div>
+            <h3>Gracz</h3>
+            <div style="width:240px; background:#333; height:16px;">
+                <div style="height:16px; width:{{ playerHpPercent }}%; background:#4caf50;"></div>
+            </div>
+            <p>HP: {{ state.player.hp }}/100</p>
+
+            <h3>Potwór: {{ state.monster.name }}</h3>
+            <div style="width:240px; background:#333; height:16px;">
+                <div style="height:16px; width:{{ monsterHpPercent }}%; background:#f44336;"></div>
+            </div>
+            <p>HP potwora: {{ state.monster.hp }} / {{ state.monster.maxHp }}</p>
+
+            <p>Fala: {{ state.wave }} | Złoto: {{ state.gold }} | Mikstury: {{ state.healsLeft }}</p>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+                <form method="post" action="{{ path('game_action', {actionName:'attack'}) }}"><button>Attack</button></form>
+                <form method="post" action="{{ path('game_action', {actionName:'heavy'}) }}"><button>Heavy Attack</button></form>
+                <form method="post" action="{{ path('game_action', {actionName:'heal'}) }}"><button{% if state.healsLeft <= 0 %} disabled{% endif %}>Heal</button></form>
+                <form method="post" action="{{ path('game_action', {actionName:'run'}) }}"><button>Run</button></form>
+                <form method="post" action="{{ path('game_reset') }}"><button>New Game</button></form>
+            </div>
+
+            {% if state.over %}
+                <p style="margin-top:12px;"><strong>GAME OVER.</strong> Spróbuj ponownie!</p>
+            {% endif %}
+        </div>
+
+{#        <div style="min-width:320px;">#}
+{#            <h3>Log</h3>#}
+{#            <ol>#}
+{#                {% for row in log %}#}
+{#                    <li>#}
+{#                        {% if row is iterable %}#}
+{#                            {{ row|join(' ') }}#}
+{#                        {% else %}#}
+{#                            {{ row }}#}
+{#                        {% endif %}#}
+{#                    </li>#}
+{#                {% endfor %}#}
+{#            </ol>#}
+{#        </div>#}
+
+    </div>
+{% endblock %}
