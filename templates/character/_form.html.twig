@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.className) }}
+    {{ form_row(form.level) }}
+    {{ form_row(form.strength) }}
+    {{ form_row(form.agility) }}
+    {{ form_row(form.intelligence) }}
+    {{ form_row(form.description) }}
+
+<button type="submit">
+    {{ button_label|default('Zapisz') }}
+</button>
+{{ form_end(form) }}

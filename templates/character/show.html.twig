@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Szczegóły postaci{% endblock %}
+
+{% block body %}
+    <h1>{{ character.name }}</h1>
+
+    <ul>
+        <li>Klasa: {{ character.className }}</li>
+        <li>Poziom: {{ character.level }}</li>
+        <li>Siła: {{ character.strength }}</li>
+        <li>Zwinność: {{ character.agility }}</li>
+        <li>Inteligencja: {{ character.intelligence }}</li>
+        <li>Dodano: {{ character.createdAt|date('Y-m-d H:i') }}</li>
+    </ul>
+
+    {% if character.description %}
+        <h2>Opis</h2>
+        <p>{{ character.description }}</p>
+    {% endif %}
+
+    <a href="{{ path('character_edit', {id: character.id}) }}">Edytuj</a> |
+    <a href="{{ path('character_index') }}">← Powrót do listy</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edycja postaci{% endblock %}
+
+{% block body %}
+    <h1>Edytuj postać</h1>
+
+    {% include 'character/_form.html.twig' with { form: form, button_label: 'Zapisz zmiany' } %}
+
+    <a href="{{ path('character_index') }}">← Powrót do listy</a>
+{% endblock %}

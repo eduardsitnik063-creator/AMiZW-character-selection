@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nowa postać{% endblock %}
+
+{% block body %}
+    <h1>Dodaj nową postać</h1>
+
+    {% include 'character/_form.html.twig' with { form: form, button_label: 'Dodaj' } %}
+
+    <a href="{{ path('character_index') }}">← Powrót do listy</a>
+{% endblock %}

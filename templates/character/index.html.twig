@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista postaci{% endblock %}
+
+{% block body %}
+    <h1>Lista postaci</h1>
+
+    <a href="{{ path('character_new') }}">+ Dodaj nową postać</a>
+
+    {% if characters is empty %}
+        <p>Brak postaci w bazie.</p>
+    {% else %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Klasa</th>
+                <th>Poziom</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for character in characters %}
+                <tr>
+                    <td>{{ character.id }}</td>
+                    <td>{{ character.name }}</td>
+                    <td>{{ character.className }}</td>
+                    <td>{{ character.level }}</td>
+                    <td>
+                        <a href="{{ path('character_show', {id: character.id}) }}">Szczegóły</a>
+                        |
+                        <a href="{{ path('character_edit', {id: character.id}) }}">Edytuj</a>
+                        |
+                        <form method="post"
+                              action="{{ path('character_delete', {id: character.id}) }}"
+                              style="display:inline"
+                              onsubmit="return confirm('Na pewno usunąć?');">
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('delete' ~ character.id) }}">
+                            <button type="submit">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
