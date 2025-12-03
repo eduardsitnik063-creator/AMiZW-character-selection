@@ -49,23 +49,38 @@ class CharacterController extends AbstractController
     #[Route('/{id}', name: 'character_show', methods: ['GET'])]
     public function show(): Response
     {
+        $character = $this->characterRepository->find($id);
+
         return $this->render('character/show.html.twig', [
-//            'character' => $character,
+            'character' => $character,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'character_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request): Response
+    public function edit(Request $request, Character $character): Response
     {
+        $form = $this->createForm(CharacterType::class, $character);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->characterService->editCharacter($character);
+
+            $this->addFlash('success', 'Postać została dodana.');
+
+            return $this->redirectToRoute('character_index');
+        }
+
         return $this->render('character/edit.html.twig', [
-//            'character' => $character,
-//            'form' => $form,
+            'character' => $character,
+            'form' => $form
         ]);
     }
 
     #[Route('/{id}', name: 'character_delete', methods: ['POST'])]
-    public function delete(Request $request): Response
+    public function delete(Request $request, Character $character): Response
     {
+        $this->characterService->deleteCharacter($character);
+
         return $this->redirectToRoute('character_index');
     }
 }
